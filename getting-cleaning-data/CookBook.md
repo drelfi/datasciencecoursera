@@ -9,9 +9,9 @@ The first topic worth to mention is the difference between variables and observa
 
 According to tidy data definition:
 
-#. Each variable forms a column.
-#. Each observation forms a row.
-#. Each type of observational unit forms a table
+1. Each variable forms a column.
+1. Each observation forms a row.
+1. Each type of observational unit forms a table
 
 ## Introduction
 
@@ -27,11 +27,12 @@ The output of this analysis is a data frame containing the mean of all the varia
 
 In a glympse, the output is as follow:
 
-|   subject   |    activity.name| time.BodyAccelerometer.mean.X | time.BodyAccelerometer.mean.Y | ... |
-|       2     |      STANDING   |                  0.2779115    |               -0.01842083 | ... |
-|       2     |       SITTING   |                  0.2770874    |               -0.01568799 | ... |
-|       2     |        LAYING   |                  0.2813734    |               -0.01815874 | ... |
-|  ...        |       ...       |                 ...           |               ...         | ... |
+   subject   |    activity.name| time.BodyAccelerometer.mean.X | time.BodyAccelerometer.mean.Y | ... 
+-------------|-----------------|-------------------------------|-------------------------------|-----
+       2     |      STANDING   |                  0.2779115    |               -0.01842083 | ... 
+       2     |       SITTING   |                  0.2770874    |               -0.01568799 | ... 
+       2     |        LAYING   |                  0.2813734    |               -0.01815874 | ... 
+  ...        |       ...       |                 ...           |               ...         | ... 
 
 
 ## Considerations
