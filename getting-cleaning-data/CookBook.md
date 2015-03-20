@@ -59,6 +59,8 @@ The following is a list of considerations taken at the moment of script creation
 
 ## Variables
 
+As for the units of the values, the README file states that all the values have been normalized to [-1,1], so my assumption is that it was made for comparison purposes. Units are not relevant more than for comparing between each group of values.
+
 * Mean and Standard deviation for the time in Body Accelaration axis (XYZ)
   * `time.BodyAcceleration.mean.X`
   * `time.BodyAcceleration.mean.Y`
