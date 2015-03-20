@@ -41,7 +41,6 @@ publish.varnames <- function( .data, dir, features.file = "features.txt" ) {
     gsub(pattern="\\.+$", replacement="") %>%
     sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
     sub(pattern="^f([A-Z])", replacement="frequency.\\1") %>%
-    sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
     sub(pattern="Mag", replacement="Magnitude") %>%
     sub(pattern="Acc", replacement="Accelerometer") %>%
     sub(pattern="Gyro", replacement="Gyroscope")

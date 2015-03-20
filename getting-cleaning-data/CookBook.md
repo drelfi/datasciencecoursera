@@ -34,9 +34,24 @@ In a glympse, the output is as follow:
        2     |        LAYING   |                  0.2813734    |               -0.01815874 | ... 
   ...        |       ...       |                 ...           |               ...         | ... 
 
+where:
 
-## Considerations
+* `subject` contains volunteer's identification
+* `activity.name` is the type of activity doing by the volunteer when the observation was taken
+* the rest of the columns (like `time.BodyAccelerometer.mean.X` and `time.BodyAccelerometer.mean.Y`) are variables measured described in the section "Variables" below
+* values of each variables' column are the average of all the observations for each of the variables by subject and activity.name. Note that there will be only one row per (subject,activity.name) pair of values.
 
+## Considerations and changes to the data
+
+The following is a list of considerations taken at the moment of script creation:
+
+* The filtering of the columns based on mean and std was done using the pattern `mean()` and `std()`, excluding the meanFreq columns.
+* Variable names were transformed according to accepted names for data frames columns as stated in R [manual](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html) for `make.names`:
+  > A syntactically valid name consists of letters, numbers and the dot or underline characters and starts with a letter or the dot not followed by a number. Names such as ".2way" are not valid, and neither are the reserved words.
+* Column names were extended to provide better naming convention as:
+** preceding names with "t" was replaced to "time."
+** preceding names with "f" was replaced to "frequency"
+** Mag, Acc and Gyro abrevations were extended to "Magnitude", "Accelerometer" and "Gyroscope" respectively
 
 
 ## Variables
