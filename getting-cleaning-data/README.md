@@ -28,7 +28,8 @@ The script 'run_analysis.R' relies on the following packages for running:
 
 Install those packages in the system where the script will be run using the following syntax:
 
-```install.packages(<name of the package>)
+```
+install.packages(<name of the package>)
 ```
 
 In order to get the output required, the function to call is `getting.and.cleaning.data` specifying the folder where the data is (if there is no parameter, it will assume there is a folder called 'UCI HAR Dataset' in current working directory)
