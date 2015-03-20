@@ -40,7 +40,7 @@ publish.varnames <- function( .data, dir, features.file = "features.txt" ) {
     gsub(pattern="\\.{3}", replacement=".") %>%
     gsub(pattern="\\.+$", replacement="") %>%
     sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
-    sub(pattern="^f([A-Z])", replacement="fourier.\\1") %>%
+    sub(pattern="^f([A-Z])", replacement="frequency.\\1") %>%
     sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
     sub(pattern="Mag", replacement="Magnitude") %>%
     sub(pattern="Acc", replacement="Accelerometer") %>%
@@ -117,8 +117,18 @@ summarize.ucidataset <- function( .data ) {
   require("data.table")
   
   # Summarizing all the data by subject and activity
-  # summarise_each is another way of doing, but since I found this solution using data table
-  # I prefered to keep it
+  # summarise_each is another way of doing it, but since I found first this solution using data table
+  # I preferred to keep it
   dt <- data.table(.data)
   dt[, lapply( .SD, mean ), by=c("subject","activity.name")]
+}
+
+#' Main function running points 1 to 5 for the Getting and Cleaning Data
+#' from coursera (getdata-012)
+#' 
+#' @param dir where the data is
+#' @return tidy dataset based on the excersice purpose 
+getting.and.cleaning.data <- function( dir = "UCI HAR Dataset" ) {
+  require('dplyr')
+  tidy.ucidataset(dir) %>% summarize.ucidataset()
 }
