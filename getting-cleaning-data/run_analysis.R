@@ -1,3 +1,8 @@
+#' Loading UCI data set function. It reads all the required
+#' files and publishes a single data frame
+#' 
+#' @param [required] directory where the UCI data set resides
+#' @return dataset with 563 variables and 10299 obs.
 read.ucidataset <- function( dir, xfile = file.path("test","X_test.txt"), yfile = file.path("test","y_test.txt"), subject = file.path("test","subject_test.txt")) {
   # Reading measures labels
   xfile.data <- read.table(file.path(dir, xfile) )
@@ -15,6 +20,13 @@ read.ucidataset <- function( dir, xfile = file.path("test","X_test.txt"), yfile 
   result
 }
 
+#' Assign the variable names based on a list of variable names
+#' located in a file.
+#' It also expands the names for getting a better understanding of the
+#' variables meaning
+#' 
+#' @param .data data frame to change variable names
+#' @return same data frame used as input with better variable names
 publish.varnames <- function( .data, dir, features.file = "features.txt" ) {
   require("dplyr")
   
@@ -22,12 +34,27 @@ publish.varnames <- function( .data, dir, features.file = "features.txt" ) {
   var.names <- 
     read.table(file.path(dir,features.file)) %>% 
     rbind(data.frame("V1" = c(562, 563), "V2" = c("labels", "subject")))
-
-  names(.data) <- make.names(var.names[["V2"]], unique=TRUE)
+  
+  # Clean the names to be more descriptive
+  names(.data) <- make.names(var.names[["V2"]], unique=TRUE) %>%
+    gsub(pattern="\\.{3}", replacement=".") %>%
+    gsub(pattern="\\.+$", replacement="") %>%
+    sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
+    sub(pattern="^f([A-Z])", replacement="fourier.\\1") %>%
+    sub(pattern="^t([A-Z])", replacement="time.\\1") %>%
+    sub(pattern="Mag", replacement="Magnitude") %>%
+    sub(pattern="Acc", replacement="Accelerometer") %>%
+    sub(pattern="Gyro", replacement="Gyroscope")
     
   .data
 }
 
+#' Read the activity labels from a file and create a new column with a mapping
+#' to the number specified in 'labels'
+#' 
+#' @param .data where to put the new column
+#' @param dir where the file with activity labels is
+#' @return same data frame used as input with a new column called 'activity.name'
 add.activitylabels <- function( .data, dir, activitylabels.file = "activity_labels.txt" ) {
   require("dplyr")
   
@@ -40,6 +67,13 @@ add.activitylabels <- function( .data, dir, activitylabels.file = "activity_labe
     inner_join(activity.names, by="labels") 
 }
 
+#' Select relevant columns from the data set based on the exercise premise:
+#'     2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+#'     
+#' @param .data from where the selection must be done
+#' @param dir where the variable names are. This parameter is required due to the
+#'      transformation the names receives when they are assigned as columns.
+#' @return a narrower data frame with only the columns containing mean and std values
 get.relevantcolumns <- function( .data, dir, features.file = "features.txt" ) {
   require("dplyr")
   
@@ -51,7 +85,16 @@ get.relevantcolumns <- function( .data, dir, features.file = "features.txt" ) {
   select(.data, filter.names[["V1"]])
 }
 
-tidy.ucidataset <- function( dir ) {
+#' Main function to make the UCI data set tidy. It performs the operations 
+#' required by the exercise:
+#'    1. Merges the training and the test sets to create one data set.
+#'    2. Extracts only the measurements on the mean and standard deviation for each measurement. 
+#'    3. Uses descriptive activity names to name the activities in the data set
+#'    4. Appropriately labels the data set with descriptive variable names.
+#'    
+#' @param dir folder where the UCI data is located
+#' @return Tidy data frame with UCI data loaded
+tidy.ucidataset <- function( dir = "UCI HAR Dataset/") {
   require("dplyr")
   
   # Read full dataset
@@ -62,12 +105,20 @@ tidy.ucidataset <- function( dir ) {
     publish.varnames(dir) %>%
     add.activitylabels(dir) %>%
     get.relevantcolumns(dir)
+
 }
 
+#' Once the data has been put in a tidy format, create the summarization based on:
+#'    5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+#' 
+#' @param .data data to be summarized
+#' @return data frame with all the summarizations calculating the mean by subject and activity.name
 summarize.ucidataset <- function( .data ) {
   require("data.table")
   
   # Summarizing all the data by subject and activity
+  # summarise_each is another way of doing, but since I found this solution using data table
+  # I prefered to keep it
   dt <- data.table(.data)
   dt[, lapply( .SD, mean ), by=c("subject","activity.name")]
 }
